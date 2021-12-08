@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-rabbitmq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "producer": "node producer.js",
+    "consumer": "node consumer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedroarapua/nodejs-rabbitmq.git"
+  },
+  "keywords": [],
+  "author": "Pedro Henrique F. Dias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedroarapua/nodejs-rabbitmq/issues"
+  },
+  "homepage": "https://github.com/pedroarapua/nodejs-rabbitmq#readme",
+  "dependencies": {
+    "amqplib": "^0.8.0"
+  }
+}

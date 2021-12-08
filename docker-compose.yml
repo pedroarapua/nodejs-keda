@@ -1,0 +1,34 @@
+version: '2.1'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - 15672
+  
+  producer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MESSAGE_QUEUE=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
+    command: npm run producer
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MESSAGE_QUEUE=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
+    command: npm run consumer
