@@ -1,5 +1,5 @@
 const rabbit = require('amqplib');
-const QUEUE_NAME = 'square';
+const QUEUE_NAME = 'queue_number';
 const MESSAGE_QUEUE = process.env.MESSAGE_QUEUE;
 
 // create connection variable
@@ -10,9 +10,8 @@ connection.then(async (conn)=>{
   const channel = await conn.createChannel();
   // start to watch msgs in rabbitmq
   channel.consume(QUEUE_NAME, (m)=>{
-    const number = parseInt(m.content.toString());
-    const square = number * number;
-    console.log(square);
+    const msg = m.content.toString();
+    console.log(`received message => ${msg}`);
     channel.ack(m);
   });
 });

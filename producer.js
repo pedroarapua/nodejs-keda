@@ -1,6 +1,6 @@
 const rabbit = require('amqplib');
 const MESSAGE_QUEUE = process.env.MESSAGE_QUEUE;
-const QUEUE_NAME = 'square';
+const QUEUE_NAME = 'queue_number';
 const EXCHANGE_TYPE = 'direct';
 const EXCHANGE_NAME = 'main';
 const KEY = 'myKey';
@@ -16,6 +16,7 @@ connection.then(async (conn)=>{
   await channel.assertQueue(QUEUE_NAME);
   channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, KEY);
   numbers.forEach((number)=>{
-    channel.sendToQueue(QUEUE_NAME, Buffer.from(number))
+    console.log(`sending message => ${number}`);
+    channel.sendToQueue(QUEUE_NAME, Buffer.from(number));
   })
 })
