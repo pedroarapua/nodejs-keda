@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nodejs-consumer-worker-secret
+data:
+  RABBITMQ_URL: YW1xcDovL2FkbWluOmFkbWluQHJhYmJpdG1xLnJhYmJpdG1xLnN2Yy5jbHVzdGVyLmxvY2FsOjU2NzI=
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-consumer-worker
+  labels:
+    app: nodejs-consumer-worker
+spec:
+  selector:
+    matchLabels:
+      app: nodejs-consumer-worker
+  template:
+    metadata:
+      labels:
+        app: nodejs-consumer-worker
+    spec:
+      containers:
+      - name: nodejs-consumer-worker
+        image: pedroarapua/nodejs-rabbitmq:latest
+        command: ["npm"]
+        args: ["run", "consumer"]
+        env:
+        - name: MESSAGE_QUEUE
+          value: "amqp://admin:admin@rabbitmq.rabbitmq.svc.cluster.local:5672"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: rabbitmq-consumer-scale
+spec:
+  scaleTargetRef:
+    name: nodejs-consumer-worker
+  pollingInterval: 5 # Optional. Default: 30 seconds
+  cooldownPeriod: 30 # Optional. Default: 300 seconds
+  maxReplicaCount: 30 # Optional. Default: 100
+  triggers:
+    - type: rabbitmq
+      metadata:
+        protocol: amqp
+        queueName: queue_number
+        mode: QueueLength
+        value: "5"
+      authenticationRef:
+        name: nodejs-consumer-worker-trigger
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: nodejs-consumer-worker-trigger
+spec:
+  secretTargetRef:
+    - parameter: host
+      name: nodejs-consumer-worker-secret
+      key: RABBITMQ_URL
+---
