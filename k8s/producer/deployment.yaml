@@ -22,7 +22,8 @@ spec:
     spec:
       containers: 
       - name: nodejs-producer-worker
-        image: pedroarapua/nodejs-rabbitmq:latest
+        image: pedroarapua/nodejs-rabbitmq:0.0.1
+        imagePullPolicy: IfNotPresent
         command: ["npm"]
         args: ["run", "producer"]
         envFrom:

@@ -22,10 +22,13 @@ spec:
     spec:
       containers:
       - name: nodejs-consumer-worker
-        image: pedroarapua/nodejs-rabbitmq:latest
+        image: pedroarapua/nodejs-rabbitmq:0.0.1
+        imagePullPolicy: IfNotPresent
         command: ["npm"]
         args: ["run", "consumer"]
         env:
+        - name: OI
+          value: "abc"
         - name: MESSAGE_QUEUE
           value: "amqp://admin:admin@rabbitmq.rabbitmq.svc.cluster.local:5672"
 ---
@@ -38,6 +41,7 @@ spec:
     name: nodejs-consumer-worker
   pollingInterval: 5 # Optional. Default: 30 seconds
   cooldownPeriod: 30 # Optional. Default: 300 seconds
+  minReplicaCount:  0 # Optional. Default: 0
   maxReplicaCount: 30 # Optional. Default: 100
   triggers:
     - type: rabbitmq
@@ -45,7 +49,7 @@ spec:
         protocol: amqp
         queueName: queue_number
         mode: QueueLength
-        value: "5"
+        value: "1"
       authenticationRef:
         name: nodejs-consumer-worker-trigger
 ---

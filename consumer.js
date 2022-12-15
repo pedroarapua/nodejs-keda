@@ -10,6 +10,8 @@ connection = rabbit.connect(MESSAGE_QUEUE);
 connection.then(async (conn)=>{
   // connect to the channel
   const channel = await conn.createChannel();
+  // create queue
+  await channel.assertQueue(QUEUE_NAME);
   // start to watch msgs in rabbitmq
   channel.consume(QUEUE_NAME, async (m)=>{
     await delay(5000)
