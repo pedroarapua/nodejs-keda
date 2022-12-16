@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: app-rabbitmq
-        image: app-rabbitmq
+        image: busybox
         imagePullPolicy: IfNotPresent
         command: ["watch"]
         args: ["echo"]
