@@ -36,6 +36,6 @@ spec:
   - type: cron
     metadata:
       timezone: America/Argentina/Buenos_Aires
-      start: 0 9 * * *
+      start: 0 13 * * *
       end: 0 22 * * *
       desiredReplicas: "2"

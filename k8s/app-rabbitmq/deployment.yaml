@@ -44,7 +44,7 @@ spec:
         protocol: amqp
         queueName: queue_number
         mode: QueueLength
-        value: "1"
+        value: "5"
       authenticationRef:
         name: app-rabbitmq-trigger
 ---

@@ -17,6 +17,6 @@ connection.then(async (conn)=>{
   channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, KEY);
   for(i = 1; i <= count; i++) {
     console.log(`sending message => ${i}`);
-    channel.sendToQueue(QUEUE_NAME, Buffer.from(i));
+    channel.sendToQueue(QUEUE_NAME, Buffer.from(`${i}`));
   }
 })
