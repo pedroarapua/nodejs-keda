@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cronjob
+  labels:
+    app: app-cronjob
+spec:
+  selector:
+    matchLabels:
+      app: app-cronjob
+  template:
+    metadata:
+      labels:
+        app: app-cronjob
+    spec:
+      containers:
+      - name: app-cronjob
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["watch"]
+        args: ["echo"]
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: app-cronjob-scaledobject
+spec:
+  scaleTargetRef:
+    name: app-cronjob
+  pollingInterval: 5
+  cooldownPeriod: 30
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+  - type: cron
+    metadata:
+      timezone: America/Argentina/Buenos_Aires
+      start: 0 9 * * *
+      end: 0 22 * * *
+      desiredReplicas: "2"
